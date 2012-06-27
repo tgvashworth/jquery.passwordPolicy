@@ -16,12 +16,17 @@
   /**
    * Some example usage of jquery.passwordPolicy
    */
+  var badPasswords = [
+    'password', '123456', '12345678', '1234', '12345',
+    'qwerty', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm',
+    '!@£$%^&*()', 'QWERTYUIOP'
+  ];
   var tests = [
     {
       name: 'Size Matters',
-      description: 'Is the password longer than 10 characters?',
+      description: 'Is the password longer than 11 characters?',
       cb: function (val) {
-        return (val.length > 10 ? true : false);
+        return (val.length > 11 ? true : false);
       }
     },
     {
@@ -29,6 +34,38 @@
       description: 'Does the password contain repeated characters (2 or more times)?',
       cb: function (val) {
         return (val.match(/(\w)\1{2,}/gi) ? false : true);
+      }
+    },
+    // {
+    //   name: 'Homogeneity',
+    //   description: 'Is the password all the same kind of characters?',
+    //   cb: function (val) {
+    //     return (val.match(/^([a-zA-Z\d])\1+$/gi) ? false : true);
+    //   }
+    // },
+    {
+      name: 'Entropic',
+      description: 'Might this password hard for you to remember?',
+      cb: function (val) {
+        return (val.match(/(\w\W)\1+/gi) ? false : true);
+      }
+    },
+    {
+      name: 'Predictable',
+      description: 'Is the password horrendously obvious?',
+      cb: function (val) {
+        return (badPasswords.indexOf(val) > -1 ? false : true);
+      }
+    },
+    {
+      name: 'Semi-Predictable',
+      description: 'Does the password contain something horrendously obvious?',
+      cb: function (val) {
+        var i = 0, l = badPasswords.length;
+        for( ; i < l; i++ ) {
+          if( val.indexOf(badPasswords[i]) > -1 ) { return false; }
+        }
+        return true;
       }
     }
   ];

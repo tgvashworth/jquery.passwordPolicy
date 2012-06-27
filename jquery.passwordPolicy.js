@@ -21,8 +21,6 @@
     var elem = this;
     
     var runTest = function (test) {
-      console.log("Testing:", test.name);
-      
       // Run the test's callback, passing the current value of
       // the element and another callback to be run when the
       // test is complete
