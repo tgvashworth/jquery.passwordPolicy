@@ -6,12 +6,34 @@
 
 <div class="wrapper">
   <h1>Try your password<h1>
-  <input type="password" class="password">
+  <input type="password">
   <ul class="output"></ul>
 </div>
 
 <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="jquery.passwordPolicy.js"></script>
 <script>
-  $('.password').passwordPolicy();
+  /**
+   * Some example usage of jquery.passwordPolicy
+   */
+  var tests = [
+    {
+      name: 'Size Matters',
+      description: 'Is the password longer than 10 characters?',
+      cb: function (val) {
+        return (val.length > 10 ? true : false);
+      }
+    },
+    {
+      name: 'Groundhog',
+      description: 'Does the password contain repeated characters (2 or more times)?',
+      cb: function (val) {
+        return (val.match(/(\w)\1{2,}/gi) ? false : true);
+      }
+    }
+  ];
+  // Validate the password field
+  $('input[type="password"]').passwordPolicy({
+    tests: tests
+  });
 </script>

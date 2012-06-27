@@ -15,17 +15,17 @@
   $.fn.passwordPolicy = function (userConfig) {
     
     // Ensure config is an object
-    if( ! config ) { config = {}; }
+    if( ! userConfig ) { userConfig = {}; }
     
     // Maintain a reference to the element
     var elem = this;
     
     var runTest = function (test) {
+      console.log("Testing:", test.name);
+      
       // Run the test's callback, passing the current value of
       // the element and another callback to be run when the
       // test is complete
-      console.log("Testing:", test.name);
-      
       var result = test.cb(elem.val());
       config.testCb(test, result);
     };
@@ -41,16 +41,19 @@
     // Callback run for each test, allowing the way the results
     // are outputted to be customised by the user
     var testCallback = function (rule, result) {
+      // Build an li to contain the test results
       var resultElem = $('<li/>', {
         'class': 'result ' + (result ? 'pass' : 'fail'),
         'text': rule.description || ''
       });
       
+      // Add a strong with the test name
       $('<strong/>', {
         'text': rule.name || 'Test',
         'class': 'test-name'
       }).prependTo(resultElem);
 
+      // Add it to the output ul
       $('.output').append(resultElem);
     };
     
@@ -70,41 +73,26 @@
     // register(function () { ... }) method to allow the suite to be extended from
     // outside the userConfig
     var config = {
-      event: 'keyup',
+      trigger: 'keyup',
       resetCb: resetCallback,
       testCb: testCallback,
       completeCb: completeCallback,
-      tests: [
-        {
-          name: 'Size Matters',
-          description: 'Is the password longer than 10 characters?',
-          cb: function (val) {
-            return (val.length > 10 ? true : false);
-          }
-        },
-        {
-          name: 'Groundhog',
-          description: 'Does the password contain repeated characters (2 or more times)?',
-          cb: function (val) {
-            return (val.match(/(\w)\1{2,}/gi) ? false : true);
-          }
-        }
-      ]
+      tests: []
     };
     
-  // Merge the defaults with the user supplied config
-    $.merge(true, config, userConfig);
+    // Merge the defaults with the user supplied config
+    $.extend(true, config, userConfig);
     
     // Get to work
-    $('body').on(config.event, elem, function (ev) {
+    $('body').on(config.trigger, elem, function (ev) {
      
-      // Fire the resetCallback
+      // Fire the reset callback
       config.resetCb(ev);
 
       // Test against default/supplied rules
       var i = 0, l = config.tests.length;
       for( ; i < l; i++ ) {
-        // Run it... profit!
+        // Run it... and profit!
         config.completeCb(runTest(config.tests[i]));
       }
       
