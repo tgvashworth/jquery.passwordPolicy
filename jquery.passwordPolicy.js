@@ -77,7 +77,7 @@
       tests: [
         {
           name: 'Size Matters',
-          description: 'Is the password longer then 10 characters?',
+          description: 'Is the password longer than 10 characters?',
           cb: function (val) {
             return (val.length > 10 ? true : false);
           }
