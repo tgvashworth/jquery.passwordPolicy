@@ -17,9 +17,8 @@
    * Some example usage of jquery.passwordPolicy
    */
   var badPasswords = [
-    'password', '123456', '12345678', '1234', '12345',
-    'qwerty', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm',
-    '!@£$%^&*()', 'QWERTYUIOP'
+    'password', '1234', '12345', '12345', '123456', '12345678',
+    'qwerty', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm', '!@£$%^&*()'
   ];
   var tests = [
     {
@@ -36,13 +35,13 @@
         return (val.match(/(\w)\1{2,}/gi) ? false : true);
       }
     },
-    // {
-    //   name: 'Homogeneity',
-    //   description: 'Is the password all the same kind of characters?',
-    //   cb: function (val) {
-    //     return (val.match(/^([a-zA-Z\d])\1+$/gi) ? false : true);
-    //   }
-    // },
+    {
+      name: 'Homogeneity',
+      description: 'Is the password all the same kind of characters?',
+      cb: function (val) {
+        return (val.match(/^([a-z]+|[A-Z]+|[0-9]+)$/g) ? false : true);
+      }
+    },
     {
       name: 'Entropic',
       description: 'Might this password hard for you to remember?',
