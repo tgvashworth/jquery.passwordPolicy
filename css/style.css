@@ -58,3 +58,8 @@ input:focus {
 .fail {
   background: #faa;
 }
+
+small {
+  margin-top: 1em;
+  display: block;
+}
